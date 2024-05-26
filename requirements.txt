@@ -1,1 +1,1 @@
-Archivo para listar las dependencias del proyecto.
+ply pydot pillow PyQt5 graphviz tkinter

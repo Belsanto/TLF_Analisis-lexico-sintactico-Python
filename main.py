@@ -1,19 +1,21 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QVBoxLayout, QWidget, QTextEdit, QPushButton, QLabel
 from PyQt5.QtCore import Qt
-from tokens import lexer
-from my_parser import parser
-from tree import build_tree, draw_tree
+from tokens import lexer  # Importa el lexer generado por el analizador léxico
+from my_parser import parser  # Importa el parser
+from tree import build_tree, draw_tree  # Importa funciones para construir y dibujar árboles
 import tkinter as tk
 from PIL import Image, ImageTk
 import os
 
+# Define la clase principal de la aplicación
 class Main(QMainWindow):
     def __init__(self):
         super().__init__()
         self.initUI()
 
     def initUI(self):
+        # Configura la ventana principal
         self.setWindowTitle("Compilador")
         self.setGeometry(100, 100, 800, 600)
 
@@ -22,37 +24,44 @@ class Main(QMainWindow):
         self.setCentralWidget(self.centralWidget)
         self.layout = QVBoxLayout(self.centralWidget)
 
-        # Widgets
+        # Botón para cargar un archivo
         self.uploadButton = QPushButton('Subir Archivo', self)
         self.uploadButton.clicked.connect(self.ev_archivo)
         self.layout.addWidget(self.uploadButton)
 
+        # Área de texto para el código fuente
         self.codigoFuente = QTextEdit(self)
         self.layout.addWidget(QLabel('Codigo Fuente', self))
         self.layout.addWidget(self.codigoFuente)
 
+        # Área de texto para el análisis léxico
         self.analisisLexico = QTextEdit(self)
         self.analisisLexico.setReadOnly(True)
         self.layout.addWidget(QLabel('Analisis Lexico', self))
         self.layout.addWidget(self.analisisLexico)
 
+        # Área de texto para el análisis sintáctico
         self.analisisSintactico = QTextEdit(self)
         self.analisisSintactico.setReadOnly(True)
         self.layout.addWidget(QLabel('Analisis Sintactico', self))
         self.layout.addWidget(self.analisisSintactico)
 
+        # Botón para iniciar el análisis léxico
         self.analizarLexicoButton = QPushButton('Analizar Lexico', self)
         self.analizarLexicoButton.clicked.connect(self.ev_lexico)
         self.layout.addWidget(self.analizarLexicoButton)
 
+        # Botón para iniciar el análisis sintáctico
         self.analizarSintacticoButton = QPushButton('Analisis Sintactico', self)
         self.analizarSintacticoButton.clicked.connect(self.ev_sintactico)
         self.layout.addWidget(self.analizarSintacticoButton)
 
+        # Botón para generar el árbol de derivación
         self.generarArbolButton = QPushButton('Generar Árbol de Derivación', self)
         self.generarArbolButton.clicked.connect(self.mostrar_arbol)
         self.layout.addWidget(self.generarArbolButton)
 
+    # Función para manejar la carga de un archivo
     def ev_archivo(self):
         options = QFileDialog.Options()
         fileName, _ = QFileDialog.getOpenFileName(self, "Subir Archivo", "", "Text Files (*.txt);;All Files (*)", options=options)
@@ -61,6 +70,7 @@ class Main(QMainWindow):
                 data = file.read()
                 self.codigoFuente.setText(data)
 
+    # Función para realizar el análisis léxico
     def ev_lexico(self):
         self.analisisLexico.clear()
         data = self.codigoFuente.toPlainText()
@@ -75,6 +85,7 @@ class Main(QMainWindow):
 
         self.analisisLexico.setText("\n".join(output))
 
+    # Función para realizar el análisis sintáctico
     def ev_sintactico(self):
         self.analisisSintactico.clear()
         data = self.codigoFuente.toPlainText()
@@ -90,6 +101,7 @@ class Main(QMainWindow):
 
         self.analisisSintactico.setText("\n".join(valores))
 
+    # Función para mostrar el árbol de derivación
     def mostrar_arbol(self):
         data = self.codigoFuente.toPlainText()
 
@@ -131,11 +143,13 @@ class Main(QMainWindow):
         else:
             print("Error al analizar la línea para generar el árbol de derivación.")
 
+# Función para iniciar la aplicación
 def iniciar():
     app = QApplication(sys.argv)
     ventana = Main()
     ventana.show()
     sys.exit(app.exec_())
 
+# Entrada principal del programa
 if __name__ == '__main__':
     iniciar()
