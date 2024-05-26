@@ -17,7 +17,7 @@ Usa una clase TreeNode para construir el árbol de derivación.
 Genera un archivo PNG del árbol de derivación utilizando Pydot y Graphviz.
 Muestra el árbol de derivación en una ventana gráfica utilizando Tkinter y Pillow.
 
-## Para este proyecto, es importate instalar las siguientes librerias de python
+## Para usar este proyecto es importate instalar Python y las siguientes librerias de Python
 ### pip install ply pydot pillow
 ### https://graphviz.org/download/
 
