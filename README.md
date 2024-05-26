@@ -19,7 +19,30 @@ Muestra el árbol de derivación en una ventana gráfica utilizando Tkinter y Pi
 
 ## Para usar este proyecto es importate instalar Python y las siguientes librerias de Python
 ### pip install ply pydot pillow
-### https://graphviz.org/download/
-
 #### tambien puedes usar: pip install -r requirements.txt
 
+### Tambien es necesario instalar https://graphviz.org/download/
+Después de instalar Graphviz, asegúrate de agregar la ubicación de la herramienta "dot" a tu variable de entorno PATH. Esto permitirá que PyDot pueda encontrar y utilizar la herramienta "dot" correctamente.
+Para agregar la ubicación de la herramienta "dot" a tu variable de entorno PATH, sigue estos pasos:
+
+Encuentra la ubicación donde se instaló Graphviz en tu sistema. Por lo general, la herramienta "dot" se instala en la carpeta bin dentro del directorio de instalación de Graphviz.
+
+Copia la ruta completa del directorio donde se encuentra la herramienta "dot".
+
+Abre el Panel de control de Windows.
+
+Haz clic en "Sistema y seguridad".
+
+Haz clic en "Sistema".
+
+En el panel izquierdo, haz clic en "Configuración avanzada del sistema".
+
+En la ventana de Propiedades del sistema, haz clic en el botón "Variables de entorno".
+
+En la sección "Variables del sistema", busca la variable llamada "PATH" y selecciónala.
+
+Haz clic en el botón "Editar...".
+
+En la ventana de Edición de variables del sistema, haz clic en el botón "Nuevo" y pega la ruta que copiaste en el paso 2.
+
+Haz clic en "Aceptar" en todas las ventanas para guardar los cambios y cerrarlas.
