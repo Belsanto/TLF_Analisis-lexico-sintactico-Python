@@ -3,4 +3,5 @@ Este repositorio se usará para almacenar el trabajo final de la asignatura Teor
 
 ## Para este proyecto, es importate instalar las siguientes librerias de python
 ### pip install ply pydot pillow
+### https://graphviz.org/download/
 
