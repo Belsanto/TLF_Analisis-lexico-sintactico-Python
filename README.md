@@ -5,3 +5,5 @@ Este repositorio se usará para almacenar el trabajo final de la asignatura Teor
 ### pip install ply pydot pillow
 ### https://graphviz.org/download/
 
+#### tambien puedes usar: pip install -r requirements.txt
+
