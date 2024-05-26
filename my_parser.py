@@ -16,7 +16,7 @@ def p_program(p):
 
 def p_statement_list(p):
     '''statement_list : statement
-                      | statement_list SEMICOLON statement'''
+                        | statement_list SEMICOLON statement'''
     if len(p) == 2:
         p[0] = [p[1]]
     else:
@@ -24,7 +24,7 @@ def p_statement_list(p):
 
 def p_statement(p):
     '''statement : assignment
-                 | expression'''
+                    | expression'''
     p[0] = p[1]
 
 def p_assignment(p):
@@ -33,8 +33,8 @@ def p_assignment(p):
 
 def p_expression(p):
     '''expression : expression PS term
-                  | expression MS term
-                  | term'''
+                    | expression MS term
+                    | term'''
     if len(p) == 4:
         if p[2] == '+':
             p[0] = p[1] + p[3]
@@ -68,7 +68,11 @@ def p_factor(p):
         p[0] = p[2]
 
 def p_error(p):
-    print("Syntax error")
+    if p:
+        print(f"Syntax error at '{p.value}' (line {p.lineno})")
+    else:
+        print("Syntax error at EOF")
+
 
 # Construir el parser
 parser = yacc.yacc()

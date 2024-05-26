@@ -1,0 +1,40 @@
+
+    # Ejemplo de codigo para probar todas las caracterasticas del lenguaje
+    # Operadores aritmaticos
+    NEWVAL := 3 + 4
+    NEWVAL := NEWVAL * 2
+    NEWVAL := NEWVAL - 5
+    NEWVAL := NEWVAL / 2
+    NEWVAL := NEWVAL % 3
+
+    # Operadores relacionales
+    IFTHIS 3 == 4 | OTHERWISE 5 > 2
+        NEWVAL := 10
+
+    # Operadores logicos
+    IFTHIS 3 == 4 && 5 != 6 | OTHERWISE 7 >= 8 || 9 <= 10
+        NEWVAL := 20
+
+    # Palabras reservadas para bucle
+    LOOPFOR NEWVAL := NEWVAL + 1
+        BREVE
+
+    # Palabras para decision
+    IFTHIS 3 == 4 | OTHERWISE 5 > 2
+        BREVE
+
+    # Palabras para la clase
+    ICLASSI INTI NEWVAL
+        BREVE
+
+    # Identificadores
+    NEWFUNC := NEWVAL
+
+    # Tipos de datos
+    NEWINT := 10
+    NEWNUM := 3.14
+    NEWEXT := "example"
+    NEWCHAR := 'c'
+
+    # Comentarios
+    B { Este es un comentario } V
