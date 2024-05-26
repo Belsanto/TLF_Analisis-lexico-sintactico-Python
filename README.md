@@ -26,7 +26,7 @@ PLY es una implementación en Python de las herramientas Lex y Yacc. Con PLY, pu
 ```bash
 pip install ply
 ```
-#### Uso
+#### Se usa para:
 - Analizador Léxico: Define las expresiones regulares para los tokens del lenguaje. Este módulo reconoce una serie de tokens que representan operadores aritméticos, relacionales, lógicos, símbolos de apertura y cierre, palabras reservadas, identificadores y valores.
 - Utiliza PLY para convertir una cadena de entrada en una secuencia de tokens.
 
