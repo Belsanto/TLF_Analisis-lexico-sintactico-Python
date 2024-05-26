@@ -22,7 +22,7 @@ Este proyecto implementa un analizador léxico y sintáctico para un lenguaje fi
 
 PLY es una implementación en Python de las herramientas Lex y Yacc. Con PLY, puedes construir el analizador léxico y sintáctico de tu lenguaje.
 
-#### Instalación
+## Instalación
 ```bash
 pip install ply
 ```
