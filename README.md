@@ -18,7 +18,7 @@ Genera un archivo PNG del árbol de derivación utilizando Pydot y Graphviz.
 Muestra el árbol de derivación en una ventana gráfica utilizando Tkinter y Pillow.
 
 ## Para usar este proyecto es importate instalar Python y las siguientes librerias de Python
-### pip install ply pydot pillow
+### pip install ply pydot pillow PyQt5
 #### tambien puedes usar: pip install -r requirements.txt
 
 ### Tambien es necesario instalar https://graphviz.org/download/
