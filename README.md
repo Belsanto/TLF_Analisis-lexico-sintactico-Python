@@ -75,7 +75,7 @@ Para instalar Graphviz, sigue estos pasos:
 
 ## Uso
 
-Para ejecutar el proyecto, simplemente ejecuta el script principal. Este leerá el código fuente desde un archivo `prueba.txt`, realizará el análisis léxico y sintáctico, y generará un reporte en formato HTML con el árbol de derivación visualizado.
+Para ejecutar el proyecto, simplemente ejecuta el script principal. Luego en la vista selecciona el archivo que leerá el código fuente (ejemplo de un archivo: `prueba.txt`),luego usa los botones y realiza el análisis léxico y sintáctico, y genera un reporte en formato HTML con el árbol de derivación visualizado.
 ```bash
 python main.py
 ```
