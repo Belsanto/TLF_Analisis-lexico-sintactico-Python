@@ -19,13 +19,17 @@ Utiliza estas reglas para generar un árbol de derivación basado en la estructu
 
 ## Graphviz y Pydot
 Para visualizar árboles de derivación y axiomas, puedes utilizar Graphviz junto con Pydot o graphviz en Python.
+## Tkinter
+Para una interfaz gráfica simple donde puedas visualizar directamente en una ventana de Python:
+
+Observacion: Tkinter viene preinstalado con Python en la mayoría de las distribuciones.
 
 Usa una clase TreeNode para construir el árbol de derivación.
 Genera un archivo PNG del árbol de derivación utilizando Pydot y Graphviz.
 Muestra el árbol de derivación en una ventana gráfica utilizando Tkinter y Pillow.
 
 ## Para usar este proyecto es importate instalar Python y las siguientes librerias de Python
-### pip install ply pydot pillow PyQt5 graphviz
+### pip install ply pydot pillow PyQt5 graphviz tkinter
 #### tambien puedes usar: pip install -r requirements.txt
 
 ### Tambien es necesario instalar https://graphviz.org/download/
