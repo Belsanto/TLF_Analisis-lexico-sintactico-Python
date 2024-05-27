@@ -4,6 +4,7 @@ from PyQt5.QtCore import Qt
 from tokens import lexer  # Importa el lexer generado por el analizador léxico
 from my_parser import parser  # Importa el parser
 from tree import build_tree, draw_tree  # Importa funciones para construir y dibujar árboles
+from graph_helpers import graficar_afd, graficar_afn  # Importa funciones para graficar AFD y AFN
 import tkinter as tk
 from PIL import Image, ImageTk
 import os
@@ -60,6 +61,16 @@ class Main(QMainWindow):
         self.generarArbolButton = QPushButton('Generar Árbol de Derivación', self)
         self.generarArbolButton.clicked.connect(self.mostrar_arbol)
         self.layout.addWidget(self.generarArbolButton)
+        
+        # Botón para graficar AFD
+        self.graficarAFDButton = QPushButton('Graficar AFD', self)
+        self.graficarAFDButton.clicked.connect(self.graficar_afd)
+        self.layout.addWidget(self.graficarAFDButton)
+
+        # Botón para graficar AFN
+        self.graficarAFNButton = QPushButton('Graficar AFN', self)
+        self.graficarAFNButton.clicked.connect(self.graficar_afn)
+        self.layout.addWidget(self.graficarAFNButton)
 
     # Función para manejar la carga de un archivo
     def ev_archivo(self):
@@ -127,29 +138,63 @@ class Main(QMainWindow):
             graph.write_png('arbol_derivacion.png')
 
             # Mostrar el árbol en una ventana
-            root = tk.Tk()
-            root.title("Derivación")
-
-            # Cargar la imagen del árbol
-            image = Image.open("arbol_derivacion.png")
-            photo = ImageTk.PhotoImage(image)
-
-            # Crear y colocar una etiqueta para mostrar la imagen
-            label = tk.Label(root, image=photo)
-            label.pack()
-
-            # Ejecutar el bucle principal de la aplicación
-            root.mainloop()
+            self.mostrar_imagen('arbol_derivacion.png')
         else:
             print("Error al analizar la línea para generar el árbol de derivación.")
 
-# Función para iniciar la aplicación
-def iniciar():
-    app = QApplication(sys.argv)
-    ventana = Main()
-    ventana.show()
-    sys.exit(app.exec_())
+    # Función para graficar AFD
+    def graficar_afd(self):
+        # Define tu AFD aquí. Ejemplo:
+        afd = {
+            'estados': ['q0', 'q1', 'q2'],
+            'estados_finales': ['q2'],
+            'transiciones': [
+                ('q0', 'a', 'q1'),
+                ('q1', 'b', 'q2'),
+                ('q2', 'a', 'q2'),
+                ('q2', 'b', 'q2'),
+            ]
+        }
+        graficar_afd(afd, 'afd')
+        self.mostrar_imagen('afd.png')
 
-# Entrada principal del programa
-if __name__ == '__main__':
-    iniciar()
+    # Función para graficar AFN
+    def graficar_afn(self):
+        # Define tu AFN aquí. Ejemplo:
+        afn = {
+            'estados': ['q0', 'q1', 'q2'],
+            'estados_finales': ['q2'],
+            'transiciones': [
+                ('q0', 'a', 'q1'),
+                ('q0', 'a', 'q2'),
+                ('q1', 'b', 'q2'),
+                ('q2', 'a', 'q2'),
+                ('q2', 'b', 'q2'),
+            ]
+        }
+        graficar_afn(afn, 'afn')
+        self.mostrar_imagen('afn.png')
+
+    # Función para mostrar una imagen en una nueva ventana
+    def mostrar_imagen(self, archivo_imagen):
+        root = tk.Tk()
+        root.title(archivo_imagen)
+
+        # Cargar la imagen del gráfico
+        image = Image.open(archivo_imagen)
+        photo = ImageTk.PhotoImage(image)
+
+        # Crear y colocar una etiqueta para mostrar la imagen
+        label = tk.Label(root, image=photo)
+        label.image = photo
+        label.pack()
+
+        # Ejecutar el bucle principal de la aplicación
+        root.mainloop()
+
+# Función principal para iniciar la aplicación
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    window = Main()
+    window.show()
+    sys.exit(app.exec_())
