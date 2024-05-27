@@ -1,3 +1,4 @@
+# tokens.py
 # Definir los tokens y el analizador léxico.
 
 import ply.lex as lex
@@ -93,8 +94,8 @@ def t_COMMENT(t):
     r'B \{.*?\} V'
     pass  # Ignorar los comentarios
 
-# Ignorar espacios y tabs
-t_ignore = ' \t'
+# Ignorar espacios, tabs y saltos de línea
+t_ignore = ' \t\n'
 
 # Manejo de errores
 def t_error(t):

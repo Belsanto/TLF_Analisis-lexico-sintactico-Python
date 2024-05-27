@@ -4,16 +4,36 @@ Unused terminals:
 
     BREVE
     CHAR
-    DIVIDE
+    COMMENT
+    EQ
+    EQNOT
+    GT
+    GTOE
+    HEXADECIMAL
+    IAI
     ICLASSI
+    IENUMI
     IFTHIS
+    INI
     INTI
+    IOI
+    LBRACE
     LOOPFOR
-    MINUS
+    LQUESTION
+    LT
+    LTOE
+    NEWCHAR
+    NEWEXT
+    NEWFUNC
+    NEWINT
+    NEWNUM
     OTHERWISE
-    PLUS
+    PW
+    RBRACE
+    RQUESTION
+    SQ
     STRING
-    TIMES
+    WHILEFOR
 
 Grammar
 
@@ -40,31 +60,51 @@ Terminals, with rules where they appear
 ASSIGN               : 6
 BREVE                : 
 CHAR                 : 
-DIVIDE               : 
+COMMENT              : 
+DB                   : 11
+EQ                   : 
+EQNOT                : 
+GT                   : 
+GTOE                 : 
+HEXADECIMAL          : 
+IAI                  : 
 ICLASSI              : 
+IENUMI               : 
 IFTHIS               : 
+INI                  : 
 INTI                 : 
+IOI                  : 
+LBRACE               : 
 LOOPFOR              : 
-MINUS                : 
+LPAREN               : 16
+LQUESTION            : 
+LT                   : 
+LTOE                 : 
 MOD                  : 12
+MS                   : 8
+NEWCHAR              : 
+NEWEXT               : 
+NEWFUNC              : 
+NEWINT               : 
+NEWNUM               : 
 NEWVAL               : 6
 NUMBER               : 14
 OTHERWISE            : 
-PLUS                 : 
+PS                   : 7
+PW                   : 
+RBRACE               : 
 REAL                 : 15
+RPAREN               : 16
+RQUESTION            : 
+SEMICOLON            : 3
+SQ                   : 
 STRING               : 
-TIMES                : 
+TS                   : 10
+WHILEFOR             : 
 error                : 
 
 Nonterminals, with rules where they appear
 
-DB                   : 11
-LPAREN               : 16
-MS                   : 8
-PS                   : 7
-RPAREN               : 16
-SEMICOLON            : 3
-TS                   : 10
 assignment           : 4
 expression           : 5 6 7 8 16
 factor               : 10 11 12 13
@@ -72,4 +112,415 @@ program              : 0
 statement            : 2 3
 statement_list       : 1 3
 term                 : 7 8 9 10 11 12
+
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . statement_list
+    (2) statement_list -> . statement
+    (3) statement_list -> . statement_list SEMICOLON statement
+    (4) statement -> . assignment
+    (5) statement -> . expression
+    (6) assignment -> . NEWVAL ASSIGN expression
+    (7) expression -> . expression PS term
+    (8) expression -> . expression MS term
+    (9) expression -> . term
+    (10) term -> . term TS factor
+    (11) term -> . term DB factor
+    (12) term -> . term MOD factor
+    (13) term -> . factor
+    (14) factor -> . NUMBER
+    (15) factor -> . REAL
+    (16) factor -> . LPAREN expression RPAREN
+
+    NEWVAL          shift and go to state 6
+    NUMBER          shift and go to state 9
+    REAL            shift and go to state 10
+    LPAREN          shift and go to state 11
+
+    program                        shift and go to state 1
+    statement_list                 shift and go to state 2
+    statement                      shift and go to state 3
+    assignment                     shift and go to state 4
+    expression                     shift and go to state 5
+    term                           shift and go to state 7
+    factor                         shift and go to state 8
+
+state 1
+
+    (0) S' -> program .
+
+
+
+state 2
+
+    (1) program -> statement_list .
+    (3) statement_list -> statement_list . SEMICOLON statement
+
+    $end            reduce using rule 1 (program -> statement_list .)
+    SEMICOLON       shift and go to state 12
+
+
+state 3
+
+    (2) statement_list -> statement .
+
+    SEMICOLON       reduce using rule 2 (statement_list -> statement .)
+    $end            reduce using rule 2 (statement_list -> statement .)
+
+
+state 4
+
+    (4) statement -> assignment .
+
+    SEMICOLON       reduce using rule 4 (statement -> assignment .)
+    $end            reduce using rule 4 (statement -> assignment .)
+
+
+state 5
+
+    (5) statement -> expression .
+    (7) expression -> expression . PS term
+    (8) expression -> expression . MS term
+
+    SEMICOLON       reduce using rule 5 (statement -> expression .)
+    $end            reduce using rule 5 (statement -> expression .)
+    PS              shift and go to state 13
+    MS              shift and go to state 14
+
+
+state 6
+
+    (6) assignment -> NEWVAL . ASSIGN expression
+
+    ASSIGN          shift and go to state 15
+
+
+state 7
+
+    (9) expression -> term .
+    (10) term -> term . TS factor
+    (11) term -> term . DB factor
+    (12) term -> term . MOD factor
+
+    PS              reduce using rule 9 (expression -> term .)
+    MS              reduce using rule 9 (expression -> term .)
+    SEMICOLON       reduce using rule 9 (expression -> term .)
+    $end            reduce using rule 9 (expression -> term .)
+    RPAREN          reduce using rule 9 (expression -> term .)
+    TS              shift and go to state 16
+    DB              shift and go to state 17
+    MOD             shift and go to state 18
+
+
+state 8
+
+    (13) term -> factor .
+
+    TS              reduce using rule 13 (term -> factor .)
+    DB              reduce using rule 13 (term -> factor .)
+    MOD             reduce using rule 13 (term -> factor .)
+    PS              reduce using rule 13 (term -> factor .)
+    MS              reduce using rule 13 (term -> factor .)
+    SEMICOLON       reduce using rule 13 (term -> factor .)
+    $end            reduce using rule 13 (term -> factor .)
+    RPAREN          reduce using rule 13 (term -> factor .)
+
+
+state 9
+
+    (14) factor -> NUMBER .
+
+    TS              reduce using rule 14 (factor -> NUMBER .)
+    DB              reduce using rule 14 (factor -> NUMBER .)
+    MOD             reduce using rule 14 (factor -> NUMBER .)
+    PS              reduce using rule 14 (factor -> NUMBER .)
+    MS              reduce using rule 14 (factor -> NUMBER .)
+    SEMICOLON       reduce using rule 14 (factor -> NUMBER .)
+    $end            reduce using rule 14 (factor -> NUMBER .)
+    RPAREN          reduce using rule 14 (factor -> NUMBER .)
+
+
+state 10
+
+    (15) factor -> REAL .
+
+    TS              reduce using rule 15 (factor -> REAL .)
+    DB              reduce using rule 15 (factor -> REAL .)
+    MOD             reduce using rule 15 (factor -> REAL .)
+    PS              reduce using rule 15 (factor -> REAL .)
+    MS              reduce using rule 15 (factor -> REAL .)
+    SEMICOLON       reduce using rule 15 (factor -> REAL .)
+    $end            reduce using rule 15 (factor -> REAL .)
+    RPAREN          reduce using rule 15 (factor -> REAL .)
+
+
+state 11
+
+    (16) factor -> LPAREN . expression RPAREN
+    (7) expression -> . expression PS term
+    (8) expression -> . expression MS term
+    (9) expression -> . term
+    (10) term -> . term TS factor
+    (11) term -> . term DB factor
+    (12) term -> . term MOD factor
+    (13) term -> . factor
+    (14) factor -> . NUMBER
+    (15) factor -> . REAL
+    (16) factor -> . LPAREN expression RPAREN
+
+    NUMBER          shift and go to state 9
+    REAL            shift and go to state 10
+    LPAREN          shift and go to state 11
+
+    expression                     shift and go to state 19
+    term                           shift and go to state 7
+    factor                         shift and go to state 8
+
+state 12
+
+    (3) statement_list -> statement_list SEMICOLON . statement
+    (4) statement -> . assignment
+    (5) statement -> . expression
+    (6) assignment -> . NEWVAL ASSIGN expression
+    (7) expression -> . expression PS term
+    (8) expression -> . expression MS term
+    (9) expression -> . term
+    (10) term -> . term TS factor
+    (11) term -> . term DB factor
+    (12) term -> . term MOD factor
+    (13) term -> . factor
+    (14) factor -> . NUMBER
+    (15) factor -> . REAL
+    (16) factor -> . LPAREN expression RPAREN
+
+    NEWVAL          shift and go to state 6
+    NUMBER          shift and go to state 9
+    REAL            shift and go to state 10
+    LPAREN          shift and go to state 11
+
+    statement                      shift and go to state 20
+    assignment                     shift and go to state 4
+    expression                     shift and go to state 5
+    term                           shift and go to state 7
+    factor                         shift and go to state 8
+
+state 13
+
+    (7) expression -> expression PS . term
+    (10) term -> . term TS factor
+    (11) term -> . term DB factor
+    (12) term -> . term MOD factor
+    (13) term -> . factor
+    (14) factor -> . NUMBER
+    (15) factor -> . REAL
+    (16) factor -> . LPAREN expression RPAREN
+
+    NUMBER          shift and go to state 9
+    REAL            shift and go to state 10
+    LPAREN          shift and go to state 11
+
+    term                           shift and go to state 21
+    factor                         shift and go to state 8
+
+state 14
+
+    (8) expression -> expression MS . term
+    (10) term -> . term TS factor
+    (11) term -> . term DB factor
+    (12) term -> . term MOD factor
+    (13) term -> . factor
+    (14) factor -> . NUMBER
+    (15) factor -> . REAL
+    (16) factor -> . LPAREN expression RPAREN
+
+    NUMBER          shift and go to state 9
+    REAL            shift and go to state 10
+    LPAREN          shift and go to state 11
+
+    term                           shift and go to state 22
+    factor                         shift and go to state 8
+
+state 15
+
+    (6) assignment -> NEWVAL ASSIGN . expression
+    (7) expression -> . expression PS term
+    (8) expression -> . expression MS term
+    (9) expression -> . term
+    (10) term -> . term TS factor
+    (11) term -> . term DB factor
+    (12) term -> . term MOD factor
+    (13) term -> . factor
+    (14) factor -> . NUMBER
+    (15) factor -> . REAL
+    (16) factor -> . LPAREN expression RPAREN
+
+    NUMBER          shift and go to state 9
+    REAL            shift and go to state 10
+    LPAREN          shift and go to state 11
+
+    expression                     shift and go to state 23
+    term                           shift and go to state 7
+    factor                         shift and go to state 8
+
+state 16
+
+    (10) term -> term TS . factor
+    (14) factor -> . NUMBER
+    (15) factor -> . REAL
+    (16) factor -> . LPAREN expression RPAREN
+
+    NUMBER          shift and go to state 9
+    REAL            shift and go to state 10
+    LPAREN          shift and go to state 11
+
+    factor                         shift and go to state 24
+
+state 17
+
+    (11) term -> term DB . factor
+    (14) factor -> . NUMBER
+    (15) factor -> . REAL
+    (16) factor -> . LPAREN expression RPAREN
+
+    NUMBER          shift and go to state 9
+    REAL            shift and go to state 10
+    LPAREN          shift and go to state 11
+
+    factor                         shift and go to state 25
+
+state 18
+
+    (12) term -> term MOD . factor
+    (14) factor -> . NUMBER
+    (15) factor -> . REAL
+    (16) factor -> . LPAREN expression RPAREN
+
+    NUMBER          shift and go to state 9
+    REAL            shift and go to state 10
+    LPAREN          shift and go to state 11
+
+    factor                         shift and go to state 26
+
+state 19
+
+    (16) factor -> LPAREN expression . RPAREN
+    (7) expression -> expression . PS term
+    (8) expression -> expression . MS term
+
+    RPAREN          shift and go to state 27
+    PS              shift and go to state 13
+    MS              shift and go to state 14
+
+
+state 20
+
+    (3) statement_list -> statement_list SEMICOLON statement .
+
+    SEMICOLON       reduce using rule 3 (statement_list -> statement_list SEMICOLON statement .)
+    $end            reduce using rule 3 (statement_list -> statement_list SEMICOLON statement .)
+
+
+state 21
+
+    (7) expression -> expression PS term .
+    (10) term -> term . TS factor
+    (11) term -> term . DB factor
+    (12) term -> term . MOD factor
+
+    PS              reduce using rule 7 (expression -> expression PS term .)
+    MS              reduce using rule 7 (expression -> expression PS term .)
+    SEMICOLON       reduce using rule 7 (expression -> expression PS term .)
+    $end            reduce using rule 7 (expression -> expression PS term .)
+    RPAREN          reduce using rule 7 (expression -> expression PS term .)
+    TS              shift and go to state 16
+    DB              shift and go to state 17
+    MOD             shift and go to state 18
+
+
+state 22
+
+    (8) expression -> expression MS term .
+    (10) term -> term . TS factor
+    (11) term -> term . DB factor
+    (12) term -> term . MOD factor
+
+    PS              reduce using rule 8 (expression -> expression MS term .)
+    MS              reduce using rule 8 (expression -> expression MS term .)
+    SEMICOLON       reduce using rule 8 (expression -> expression MS term .)
+    $end            reduce using rule 8 (expression -> expression MS term .)
+    RPAREN          reduce using rule 8 (expression -> expression MS term .)
+    TS              shift and go to state 16
+    DB              shift and go to state 17
+    MOD             shift and go to state 18
+
+
+state 23
+
+    (6) assignment -> NEWVAL ASSIGN expression .
+    (7) expression -> expression . PS term
+    (8) expression -> expression . MS term
+
+    SEMICOLON       reduce using rule 6 (assignment -> NEWVAL ASSIGN expression .)
+    $end            reduce using rule 6 (assignment -> NEWVAL ASSIGN expression .)
+    PS              shift and go to state 13
+    MS              shift and go to state 14
+
+
+state 24
+
+    (10) term -> term TS factor .
+
+    TS              reduce using rule 10 (term -> term TS factor .)
+    DB              reduce using rule 10 (term -> term TS factor .)
+    MOD             reduce using rule 10 (term -> term TS factor .)
+    PS              reduce using rule 10 (term -> term TS factor .)
+    MS              reduce using rule 10 (term -> term TS factor .)
+    SEMICOLON       reduce using rule 10 (term -> term TS factor .)
+    $end            reduce using rule 10 (term -> term TS factor .)
+    RPAREN          reduce using rule 10 (term -> term TS factor .)
+
+
+state 25
+
+    (11) term -> term DB factor .
+
+    TS              reduce using rule 11 (term -> term DB factor .)
+    DB              reduce using rule 11 (term -> term DB factor .)
+    MOD             reduce using rule 11 (term -> term DB factor .)
+    PS              reduce using rule 11 (term -> term DB factor .)
+    MS              reduce using rule 11 (term -> term DB factor .)
+    SEMICOLON       reduce using rule 11 (term -> term DB factor .)
+    $end            reduce using rule 11 (term -> term DB factor .)
+    RPAREN          reduce using rule 11 (term -> term DB factor .)
+
+
+state 26
+
+    (12) term -> term MOD factor .
+
+    TS              reduce using rule 12 (term -> term MOD factor .)
+    DB              reduce using rule 12 (term -> term MOD factor .)
+    MOD             reduce using rule 12 (term -> term MOD factor .)
+    PS              reduce using rule 12 (term -> term MOD factor .)
+    MS              reduce using rule 12 (term -> term MOD factor .)
+    SEMICOLON       reduce using rule 12 (term -> term MOD factor .)
+    $end            reduce using rule 12 (term -> term MOD factor .)
+    RPAREN          reduce using rule 12 (term -> term MOD factor .)
+
+
+state 27
+
+    (16) factor -> LPAREN expression RPAREN .
+
+    TS              reduce using rule 16 (factor -> LPAREN expression RPAREN .)
+    DB              reduce using rule 16 (factor -> LPAREN expression RPAREN .)
+    MOD             reduce using rule 16 (factor -> LPAREN expression RPAREN .)
+    PS              reduce using rule 16 (factor -> LPAREN expression RPAREN .)
+    MS              reduce using rule 16 (factor -> LPAREN expression RPAREN .)
+    SEMICOLON       reduce using rule 16 (factor -> LPAREN expression RPAREN .)
+    $end            reduce using rule 16 (factor -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 16 (factor -> LPAREN expression RPAREN .)
 

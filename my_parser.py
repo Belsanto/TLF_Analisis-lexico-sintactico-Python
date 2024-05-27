@@ -1,3 +1,4 @@
+# my_parser.py
 # Importa la biblioteca yacc de PLY para generar el analizador sintáctico.
 import ply.yacc as yacc
 from tokens import tokens  # Importa los tokens generados por el analizador léxico.

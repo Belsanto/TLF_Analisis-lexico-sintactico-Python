@@ -1,13 +1,13 @@
+# main.py
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QVBoxLayout, QWidget, QTextEdit, QPushButton, QLabel
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QVBoxLayout, QWidget, QTextEdit, QPushButton, QLabel, QScrollArea, QVBoxLayout, QGraphicsView, QGraphicsScene, QGraphicsPixmapItem
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QPixmap
 from tokens import lexer  # Importa el lexer generado por el analizador léxico
 from my_parser import parser  # Importa el parser
 from tree import build_tree, draw_tree  # Importa funciones para construir y dibujar árboles
 from graph_helpers import graficar_afd, graficar_afn  # Importa funciones para graficar AFD y AFN
-import tkinter as tk
-from PIL import Image, ImageTk
-import os
+
 
 # Define la clase principal de la aplicación
 class Main(QMainWindow):
@@ -61,7 +61,7 @@ class Main(QMainWindow):
         self.generarArbolButton = QPushButton('Generar Árbol de Derivación', self)
         self.generarArbolButton.clicked.connect(self.mostrar_arbol)
         self.layout.addWidget(self.generarArbolButton)
-        
+
         # Botón para graficar AFD
         self.graficarAFDButton = QPushButton('Graficar AFD', self)
         self.graficarAFDButton.clicked.connect(self.graficar_afd)
@@ -88,13 +88,20 @@ class Main(QMainWindow):
         lexer.input(data)
 
         output = []
+        line_number = 1  # Variable para llevar el número de línea
         while True:
             tok = lexer.token()
             if not tok:
                 break
-            output.append(f"Linea {tok.lineno} Tipo {tok.type} Valor {tok.value} Posicion {tok.lexpos}")
+            # Si encontramos el token BREVE, incrementamos el número de línea
+            if tok.type == 'BREVE':
+                line_number += 1
+            # Agregamos la información del token a la salida con el número de línea actual
+            output.append(f"Linea {line_number}: \t Tipo: {tok.type} \t Valor: {tok.value} \t Posicion: {tok.lexpos} \n ")
 
         self.analisisLexico.setText("\n".join(output))
+
+
 
     # Función para realizar el análisis sintáctico
     def ev_sintactico(self):
@@ -142,55 +149,88 @@ class Main(QMainWindow):
         else:
             print("Error al analizar la línea para generar el árbol de derivación.")
 
+    # Función para construir el AFD basado en la entrada
+    def construir_afd(self, data):
+        lexer.input(data)
+        estados = ['q0']
+        transiciones = []
+        estado_actual = 'q0'
+        estado_id = 1
+
+        while True:
+            tok = lexer.token()
+            if not tok:
+                break
+            estado_siguiente = f'q{estado_id}'
+            estados.append(estado_siguiente)
+            transiciones.append((estado_actual, tok.type, estado_siguiente))
+            estado_actual = estado_siguiente
+            estado_id += 1
+
+        afd = {
+            'estados': estados,
+            'estados_finales': [estado_actual],
+            'transiciones': transiciones
+        }
+        return afd
+
+    # Función para construir el AFN basado en la entrada
+    def construir_afn(self, data):
+        lexer.input(data)
+        estados = ['q0']
+        transiciones = []
+        estado_actual = 'q0'
+        estado_id = 1
+
+        while True:
+            tok = lexer.token()
+            if not tok:
+                break
+            estado_siguiente_1 = f'q{estado_id}'
+            estado_siguiente_2 = f'q{estado_id + 1}'
+            estados.extend([estado_siguiente_1, estado_siguiente_2])
+            transiciones.append((estado_actual, tok.type, estado_siguiente_1))
+            transiciones.append((estado_actual, tok.type, estado_siguiente_2))
+            estado_actual = estado_siguiente_1
+            estado_id += 2
+
+        afn = {
+            'estados': estados,
+            'estados_finales': [estado_actual],
+            'transiciones': transiciones
+        }
+        return afn
+
     # Función para graficar AFD
     def graficar_afd(self):
-        # Define tu AFD aquí. Ejemplo:
-        afd = {
-            'estados': ['q0', 'q1', 'q2'],
-            'estados_finales': ['q2'],
-            'transiciones': [
-                ('q0', 'a', 'q1'),
-                ('q1', 'b', 'q2'),
-                ('q2', 'a', 'q2'),
-                ('q2', 'b', 'q2'),
-            ]
-        }
+        data = self.codigoFuente.toPlainText()
+        afd = self.construir_afd(data)
         graficar_afd(afd, 'afd')
         self.mostrar_imagen('afd.png')
 
     # Función para graficar AFN
     def graficar_afn(self):
-        # Define tu AFN aquí. Ejemplo:
-        afn = {
-            'estados': ['q0', 'q1', 'q2'],
-            'estados_finales': ['q2'],
-            'transiciones': [
-                ('q0', 'a', 'q1'),
-                ('q0', 'a', 'q2'),
-                ('q1', 'b', 'q2'),
-                ('q2', 'a', 'q2'),
-                ('q2', 'b', 'q2'),
-            ]
-        }
+        data = self.codigoFuente.toPlainText()
+        afn = self.construir_afn(data)
         graficar_afn(afn, 'afn')
         self.mostrar_imagen('afn.png')
 
-    # Función para mostrar una imagen en una nueva ventana
+    # Función para mostrar una imagen en una nueva ventana con scroll
     def mostrar_imagen(self, archivo_imagen):
-        root = tk.Tk()
-        root.title(archivo_imagen)
+        imagen_window = QMainWindow(self)
+        imagen_window.setWindowTitle(archivo_imagen)
 
-        # Cargar la imagen del gráfico
-        image = Image.open(archivo_imagen)
-        photo = ImageTk.PhotoImage(image)
+        scroll_area = QScrollArea(imagen_window)
+        scroll_area.setWidgetResizable(True)
 
-        # Crear y colocar una etiqueta para mostrar la imagen
-        label = tk.Label(root, image=photo)
-        label.image = photo
-        label.pack()
+        imagen_label = QLabel()
+        pixmap = QPixmap(archivo_imagen)
+        imagen_label.setPixmap(pixmap)
 
-        # Ejecutar el bucle principal de la aplicación
-        root.mainloop()
+        scroll_area.setWidget(imagen_label)
+        imagen_window.setCentralWidget(scroll_area)
+        imagen_window.resize(800, 600)
+        imagen_window.show()
 
 # Función principal para iniciar la aplicación
 if __name__ == "__main__":
